@@ -2,30 +2,29 @@ close all;
 clear all;
 clc;
 
+
 % leitura da base da dados xt, ydt, xv, ydv
 
+%% loading data
+load  vale3-2.csv
 
-load  bolsa2.csv
-
-x1=bolsa2;
-
+x1=vale3_2;
 np=length(x1);
-
-x2=atraso2(1,x1);
-x3=atraso2(2,x1);
-x4=atraso2(3,x1);
-x4=atraso2(4,x1);
-x5=atraso2(5,x1);
-x6=atraso2(6,x1);
-x7=atraso2(7,x1);
-
 ndp=1;
-x = [x1(1:np-ndp) x2(1:np-ndp) x3(1:np-ndp) x4(1:np-ndp) x5(1:np-ndp) x6(1:np-ndp) x7(1:np-ndp)];
+n_entradas = 7
+
+x = [x1(1:np-ndp)]
+
+for i = 1:n_entradas
+    temp = atraso2(i,x1)
+    x = [x temp(1:np-ndp) ]
+end
+
 
 yd=avanco2(ndp,x1);
 
 np=length(yd);
-
+%% defining training data
 npt=1000;
 
 xt=x(8:npt,:);
@@ -154,3 +153,12 @@ epm=sum(erro2)/npv
 
 a=corrcoef(ydv,ys);
 R2=a(1,2)
+
+function ave = atraso2(delay, data)
+    ave = delayseq(data,delay);
+end
+
+function ave = avanco2(delay, data)
+    tmp = delayseq(data,-delay);
+    ave = tmp(1:end-1);
+end
