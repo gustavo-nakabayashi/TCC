@@ -1,3 +1,5 @@
 data/*
 previsions/*
 .ipynb_checkpoints/
+src/*~
+src/__pycache__/
