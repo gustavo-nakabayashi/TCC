@@ -1,31 +1,27 @@
-close all;
-clear all;
-clc;
-
-
 % leitura da base da dados xt, ydt, xv, ydv
 
-%% loading data
-load  vale3-2.csv
+% loading data
 
-x1=vale3_2;
+function [epm, acerto_percentual, ys] = previsor(x1)
+
 np=length(x1);
 ndp=1;
-n_entradas = 7
+n_entradas = 7;
 
-x = [x1(1:np-ndp)]
+x = [x1(1:np-ndp)];
 
 for i = 1:n_entradas
-    temp = atraso2(i,x1)
-    x = [x temp(1:np-ndp) ]
+    temp = atraso2(i,x1);
+    x = [x temp(1:np-ndp) ];
 end
 
 
 yd=avanco2(ndp,x1);
 
 np=length(yd);
-%% defining training data
-npt=1000;
+
+% defining training data
+npt=350;
 
 xt=x(8:npt,:);
 ydt=yd(8:npt);
@@ -34,6 +30,8 @@ npt=npt-8;
 npv=np-npt;
 
 xv=x(npt+1:np,:);
+
+% defining validation data
 ydv=yd(npt+1:np);
 
 n=length(xv(1,:));
@@ -55,7 +53,7 @@ end
 
 w=zeros(n,m);
 
-%treinanemento off line
+%%treinanemento off line
 
 for epoca=1:nepocas
     for k=1:npt
@@ -133,26 +131,27 @@ for k=2:npv
    
 end
 
-acerto_percentual = acerto*100/npv
+acerto_percentual = acerto*100/npv;
 
 
-figure
-plot(ys);
-hold on
-plot(ydv,'k')
+%figure
+%plot(ys);
+%hold on
+%plot(ydv,'k')
 
 for k=1:npv
     erro2(k)=100*abs((ydv(k)-ys(k))/ydv(k));
 
 end
 
-% figure
-% hist(erro2,20)
+%figure
+%hist(erro2,20)
 
-epm=sum(erro2)/npv
+epm=sum(erro2)/npv;
 
 a=corrcoef(ydv,ys);
-R2=a(1,2)
+R2=a(1,2);
+end
 
 function ave = atraso2(delay, data)
     ave = delayseq(data,delay);
