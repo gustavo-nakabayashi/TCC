@@ -3,7 +3,7 @@ from trader import Trader
 
 min_ann = 2000.0
 max_ann = 3000.0
-stop_loss_percentage = 20
+stop_loss_percentage = 0.2
 
 trader = Trader(min_ann, max_ann, stop_loss_percentage)
 

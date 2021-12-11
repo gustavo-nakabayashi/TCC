@@ -2,7 +2,7 @@
 
 % loading data
 
-function [epm, acerto_percentual, ys] = previsor(x1)
+function [epm, acerto_percentual, ys] = previsor(x1, open)
 
 np=length(x1);
 ndp=1;
@@ -15,6 +15,8 @@ for i = 1:n_entradas
     x = [x temp(1:np-ndp) ];
 end
 
+open=avanco2(ndp,open);
+x = [x open];
 
 yd=avanco2(ndp,x1);
 
