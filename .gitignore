@@ -3,3 +3,4 @@ previsions/*
 .ipynb_checkpoints/
 src/*~
 src/__pycache__/
+src/.pytest_cache
