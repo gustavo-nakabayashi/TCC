@@ -23,7 +23,7 @@ yd=avanco2(ndp,x1);
 np=length(yd);
 
 % defining training data
-npt=350;
+npt=fix(np / (0.2^-1));
 
 xt=x(8:npt,:);
 ydt=yd(8:npt);

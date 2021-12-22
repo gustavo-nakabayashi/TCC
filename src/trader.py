@@ -9,11 +9,12 @@ class Trader(object):
         
         self.take_profit: float = take_profit
         self.stop_loss: float = stop_loss
-        # self.initial_capital = initial_capital
-        # self.total_capital = initial_capital
+        self.initial_capital = 50000
+        self.total_capital = self.initial_capital
         self.max_ann: float = 0.0
         self.min_ann: float = 0.0
         self.position: float = 0.0
+        self.position_contracts = 0
         self.is_entry = True
         self.last_trade = 0
         self.can_trade_again = True
@@ -61,7 +62,7 @@ class Trader(object):
             self.can_trade_again = close > self.min_ann
         
 
-    def send_order(self, close, is_last_candle_day):
+    def send_order(self, close, is_last_candle_day, daily_volume):
         
         if not self.can_trade_again:
             self.set_can_trade_again(close)
@@ -84,10 +85,16 @@ class Trader(object):
             if self.buy_signal(close):
                 order_nature = "buy_signal"
                 order = close
+                self.position_contracts = self.total_capital // close
+                if (self.position_contracts * close) > (daily_volume * .01):
+                    self.position_contracts = (daily_volume * .01) // close
                 self.last_trade = 1
             elif self.sell_signal(close):
                 order_nature = "sell_signal"
                 order = - close
+                self.position_contracts = self.total_capital // close
+                if (self.position_contracts * close) > (daily_volume * .01):
+                    self.position_contracts = (daily_volume * .01) // close
                 self.last_trade = -1
 
         if is_last_candle_day:
@@ -99,7 +106,11 @@ class Trader(object):
 
 
         if order: 
+            if not self.is_entry:
+                result = self.position + order
+                self.total_capital -= self.position_contracts * result
             self.position = order if self.is_entry else 0
             self.is_entry = not self.is_entry
+
 
         return order, order_nature

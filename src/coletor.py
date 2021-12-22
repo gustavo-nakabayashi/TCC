@@ -1,50 +1,61 @@
 from datetime import datetime
-import matplotlib.pyplot as plt
 import pandas as pd
-from pandas.plotting import register_matplotlib_converters
-register_matplotlib_converters()
 import MetaTrader5 as mt5
- 
-# connect to MetaTrader 5
-if not mt5.initialize():
-    print("initialize() failed")
+
+def collect_data():
+    if not mt5.initialize():
+        print("initialize() failed")
+        mt5.shutdown()
+
+    account = 66056949
+    authorized = mt5.login(account, server="XPMT5-DEMO")
+    if authorized:
+        print("connected to account #{}".format(account))
+    else:
+        print("failed to connect at account #{}, error code: {}".format(
+            account, mt5.last_error()))
+
+    timeframes = [
+        # [
+        #     mt5.TIMEFRAME_M1,
+        #     "M1"
+        # ],
+        # [
+        #     mt5.TIMEFRAME_M5,
+        #     "M5"
+        # ],
+        [
+            mt5.TIMEFRAME_M15, 
+            "M15"
+        ],
+        [
+            mt5.TIMEFRAME_D1,
+            "D1"
+        ],
+    ]
+
+    stocks = [
+        "WIN@N",
+        "WDO@N",
+        "VALE3",
+        "PETR4",
+        "CASH3",
+        "MGLU3",
+    ]
+    end_date = datetime(2021, 11, 1)
+
+    for stock in stocks:
+        for timeframe in timeframes:
+            rates = []
+            rates = mt5.copy_rates_from(stock, timeframe[0], end_date, 99999)
+            if len(rates):
+                print(f"Tamanho dos dados de {stock}_{timeframe[1]}: {len(rates)}")
+
+                rates_frame = pd.DataFrame(rates)
+                if timeframe[1] == "D1":
+                    rates_frame.to_csv(f"../data/{stock.replace('@N', '')}_{timeframe[1]}_without.csv",
+                                    index=False, header=None)
+                rates_frame.to_csv(f"../data/{stock.replace('@N', '')}_{timeframe[1]}.csv",
+                                index=False)
+
     mt5.shutdown()
- 
-# request connection status and parameters
-print(mt5.terminal_info())
-# get data on MetaTrader 5 version
-print(mt5.version())
- 
-# request ticks from AUDUSD within 2019.04.01 13:00 - 2019.04.02 13:00
-audusd_ticks = mt5.copy_ticks_range("WIN$", datetime(2020,1,27,13), datetime(2020,1,28,13), mt5.COPY_TICKS_ALL)
- 
-eurcad_rates = mt5.copy_rates_range("WIN$", mt5.TIMEFRAME_M1, datetime(2020,1,27,13), datetime(2020,1,28,13))
- 
-# shut down connection to MetaTrader 5
-mt5.shutdown()
- 
-#DATA
- 
-print('audusd_ticks(', len(audusd_ticks), ')')
-for val in audusd_ticks[:10]: print(val)
- 
-print('eurcad_rates(', len(eurcad_rates), ')')
-for val in eurcad_rates[:10]: print(val)
- 
-#PLOT
-# create DataFrame out of the obtained data
-ticks_frame = pd.DataFrame(audusd_ticks)
-# convert time in seconds into the datetime format
-ticks_frame['time']=pd.to_datetime(ticks_frame['time'], unit='s')
-# display ticks on the chart
-plt.plot(ticks_frame['time'], ticks_frame['ask'], 'r-', label='ask')
-plt.plot(ticks_frame['time'], ticks_frame['bid'], 'b-', label='bid')
- 
-# display the legends
-plt.legend(loc='upper left')
- 
-# add the header
-plt.title('EURAUD ticks')
- 
-# display the chart
-plt.show()

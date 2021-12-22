@@ -7,6 +7,7 @@ from backtest import backtest
 
 def main():
     trader = Trader(1)
+    
     df_forecast = pd.read_csv("C:\\Users\\gustavo.barros\\Documents\\UFMG\\TCC\\previsions\\PETR4_D1_high.csv")
     df_forecast.columns = ["time", "high"]
     df_low = pd.read_csv("C:\\Users\\gustavo.barros\\Documents\\UFMG\\TCC\\previsions\\PETR4_D1_low.csv")
@@ -21,15 +22,8 @@ def main():
     
     df_orders = backtest(df_close, df_forecast, trader)
 
-
-
-
     # df_orders['order'].plot(kind='bar')
     # df_orders['bad_rate'].plot(secondary_y=True)
-
-
-
-
 
 if __name__ == "__main__":
     main()

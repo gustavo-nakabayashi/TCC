@@ -1,7 +1,7 @@
-class Forecasting(object):
+class Benchmark(object):
     """docstring for Forecasting."""
     def __init__(self, arg):
-        super(Forecasting, self).__init__()
+        super(Benchmark, self).__init__()
         self.arg = arg
         
     def mma_5_days():
