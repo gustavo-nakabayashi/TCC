@@ -86,15 +86,19 @@ class Trader(object):
                 order_nature = "buy_signal"
                 order = close
                 self.position_contracts = self.total_capital // close
-                if (self.position_contracts * close) > (daily_volume * .01):
-                    self.position_contracts = (daily_volume * .01) // close
+                if (self.position_contracts) > (daily_volume * .01):
+                    self.position_contracts = (daily_volume // 100)
                 self.last_trade = 1
+                if (self.position_contracts) < 5:
+                    self.position_contracts = 5
             elif self.sell_signal(close):
                 order_nature = "sell_signal"
                 order = - close
                 self.position_contracts = self.total_capital // close
-                if (self.position_contracts * close) > (daily_volume * .01):
-                    self.position_contracts = (daily_volume * .01) // close
+                if (self.position_contracts) > (daily_volume * .01):
+                    self.position_contracts = (daily_volume // 100)
+                if (self.position_contracts) < 5:
+                    self.position_contracts = 5
                 self.last_trade = -1
 
         if is_last_candle_day:

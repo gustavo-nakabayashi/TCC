@@ -1,13 +1,14 @@
 from datetime import datetime
 import pandas as pd
 import MetaTrader5 as mt5
+from ta.volatility import BollingerBands
 
 def collect_data():
     if not mt5.initialize():
         print("initialize() failed")
         mt5.shutdown()
 
-    account = 66056949
+    account = 76056949
     authorized = mt5.login(account, server="XPMT5-DEMO")
     if authorized:
         print("connected to account #{}".format(account))
@@ -37,21 +38,37 @@ def collect_data():
     stocks = [
         "WIN@N",
         "WDO@N",
+        "ITUB4",
+        "BBDC4",
         "VALE3",
         "PETR4",
-        "CASH3",
-        "MGLU3",
+        "ABEV3",
+        "BBAS3"
     ]
     end_date = datetime(2021, 11, 1)
 
     for stock in stocks:
         for timeframe in timeframes:
             rates = []
-            rates = mt5.copy_rates_from(stock, timeframe[0], end_date, 99999)
+            rates = mt5.copy_rates_from(stock, timeframe[0], end_date, 20000)
             if len(rates):
                 print(f"Tamanho dos dados de {stock}_{timeframe[1]}: {len(rates)}")
 
                 rates_frame = pd.DataFrame(rates)
+                if stock == "WIN@N":
+                    rates_frame[["open","high","low","close"]] = rates_frame[["open","high","low","close"]] * 0.2
+                if stock == "WDO@N":
+                    rates_frame[["open","high","low","close"]] = rates_frame[["open","high","low","close"]] * 10
+                
+                # Initialize Bollinger Bands Indicator
+                indicator_bb = BollingerBands(close=rates_frame["close"], window=5, window_dev=2)
+
+                # Add Bollinger Bands features
+                rates_frame['bb_bbh'] = indicator_bb.bollinger_hband()
+                rates_frame['bb_bbl'] = indicator_bb.bollinger_lband()
+                rates_frame = rates_frame.dropna()
+
+
                 if timeframe[1] == "D1":
                     rates_frame.to_csv(f"../data/{stock.replace('@N', '')}_{timeframe[1]}_without.csv",
                                     index=False, header=None)
