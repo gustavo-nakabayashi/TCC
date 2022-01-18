@@ -2,23 +2,35 @@
 
 % loading data
 
-function [epm, acerto_percentual, ys] = previsor(x1, open)
+function [epm, acerto_percentual, ys] = previsor(low, high, open, bbh, bbl, low_or_high)
 
-np=length(x1);
+np=length(low);
 ndp=1;
-n_entradas = 7;
+n_entradas = 5;
 
-x = [x1(1:np-ndp)];
+x = [low(1:np-ndp)];
 
 for i = 1:n_entradas
-    temp = atraso2(i,x1);
+    temp = atraso2(i,low);
+    x = [x temp(1:np-ndp) ];
+end
+
+for i = 1:n_entradas
+    temp = atraso2(i,high);
     x = [x temp(1:np-ndp) ];
 end
 
 open=avanco2(ndp,open);
 x = [x open];
 
-yd=avanco2(ndp,x1);
+x = [x bbh(1:np-ndp)];
+x = [x bbl(1:np-ndp)];
+
+if low_or_high == "low"
+    yd=avanco2(ndp,low);
+elseif low_or_high == "high"
+    yd=avanco2(ndp,high);
+end
 
 np=length(yd);
 
@@ -63,8 +75,8 @@ for epoca=1:nepocas
         [ysk k1 k2 mik1 mik2 yi]= cal2yamaka(xt(k,:),n,m,1,delta,b,xmin,xmax,w);
 
         for i=1:n
-            w(i,k1(i))=w(i,k1(i)) - alfa*(ysk-ydt(k))*mik1(i);
-            w(i,k2(i))=w(i,k2(i)) - alfa*(ysk-ydt(k))*mik2(i);
+            w(i,k1(i)) = w(i,k1(i)) - alfa*(ysk-ydt(k))*mik1(i);
+            w(i,k2(i)) = w(i,k2(i)) - alfa*(ysk-ydt(k))*mik2(i);
         end
 
     end
