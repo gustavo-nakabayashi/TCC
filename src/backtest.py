@@ -18,6 +18,7 @@ def backtest(df_close, df_forecast, trader):
         trader.min_ann = today["min_ann"].item()
         trader.max_ann = today["max_ann"].item()
 
+
         order, order_nature = trader.send_order(
             row["close"], is_last_candle_day, today["real_volume"].item()
         )

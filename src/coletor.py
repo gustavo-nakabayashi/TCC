@@ -21,10 +21,10 @@ def collect_data():
         #     mt5.TIMEFRAME_M1,
         #     "M1"
         # ],
-        # [
-        #     mt5.TIMEFRAME_M5,
-        #     "M5"
-        # ],
+        [
+            mt5.TIMEFRAME_M5,
+            "M5"
+        ],
         [
             mt5.TIMEFRAME_M15, 
             "M15"
@@ -45,12 +45,12 @@ def collect_data():
         "ABEV3",
         "BBAS3"
     ]
-    end_date = datetime(2021, 11, 1)
+    end_date = datetime(2022, 1, 19)
 
     for stock in stocks:
         for timeframe in timeframes:
             rates = []
-            rates = mt5.copy_rates_from(stock, timeframe[0], end_date, 20000)
+            rates = mt5.copy_rates_from(stock, timeframe[0], end_date, 99999)
             if len(rates):
                 print(f"Tamanho dos dados de {stock}_{timeframe[1]}: {len(rates)}")
 
@@ -70,8 +70,11 @@ def collect_data():
 
 
                 if timeframe[1] == "D1":
+                    rates_frame = rates_frame[rates_frame["time"] > 1482278400]
                     rates_frame.to_csv(f"../data/{stock.replace('@N', '')}_{timeframe[1]}_without.csv",
                                     index=False, header=None)
+                else:
+                    rates_frame = rates_frame[rates_frame["time"] > 1547859661]
                 rates_frame.to_csv(f"../data/{stock.replace('@N', '')}_{timeframe[1]}.csv",
                                 index=False)
 

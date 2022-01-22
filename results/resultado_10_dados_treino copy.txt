@@ -1,0 +1,18 @@
+    "ABEV3_D1_without"     1.4336           56.954        
+    "ABEV3_D1_without"      1.378           54.225        
+    "BBAS3_D1_without"     1.8887           59.243        
+    "BBAS3_D1_without"     1.6838           57.746        
+    "BBDC4_D1_without"     1.5575            55.81        
+    "BBDC4_D1_without"     1.4912           55.546        
+    "ITUB4_D1_without"     1.4881           53.521        
+    "ITUB4_D1_without"     1.4673           56.074        
+    "PETR4_D1_without"     1.9843           58.979        
+    "PETR4_D1_without"      1.768            61.18        
+    "VALE3_D1_without"     1.7171           57.482        
+    "VALE3_D1_without"     1.6249           56.954        
+    "WDO_D1_without"      0.95489           57.675        
+    "WDO_D1_without"       0.8949           58.651        
+    "WIN_D1_without"       1.1013           55.018        
+    "WIN_D1_without"      0.96935            57.13        
+
+    

@@ -25,14 +25,14 @@ for k = 1 : length(theFiles)
         [epm, acerto_percentual, ys] = previsor(low_price_data, high_price_data, open_price_data, bbh_price_data, bbl_price_data, "low");
         epm_row = [epm_row;epm];
         acerto_percentual_row = [acerto_percentual_row;acerto_percentual];
-        name_row = [name_row; fileName(1)];
+        name_row = [name_row; fileName(1) + "_min"];
         write_data = [file_csv((length(high_price_data) - length(ys) + 1):end,1:1), ys'];
         
         % Dados baixa
         [epm, acerto_percentual, ys] = previsor(low_price_data, high_price_data, open_price_data, bbh_price_data, bbl_price_data, "high");
         epm_row = [epm_row;epm];
         acerto_percentual_row = [acerto_percentual_row;acerto_percentual];
-        name_row = [name_row; fileName(1)];
+        name_row = [name_row; fileName(1) + "_max"];
         
         write_data = [write_data, ys'];
         

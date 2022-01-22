@@ -70,6 +70,10 @@ class Trader(object):
         order = 0
         order_nature = ""
 
+        alvo = 100 * (self.max_ann - self.min_ann) / self.max_ann
+        if alvo < 0.03:
+            return order, order_nature
+
         if self.take_profit_hit(close) and not self.is_entry:
             order = - close * math.copysign(1, self.position)
             order_nature = "take_profit"
@@ -85,7 +89,9 @@ class Trader(object):
             if self.buy_signal(close):
                 order_nature = "buy_signal"
                 order = close
-                self.position_contracts = self.total_capital // close
+                self.position_contracts = 3 * self.initial_capital // close
+                # if self.total_capital < self.initial_capital:
+                #     self.position_contracts = self.initial_capital // close
                 if (self.position_contracts) > (daily_volume * .01):
                     self.position_contracts = (daily_volume // 100)
                 self.last_trade = 1
@@ -94,7 +100,9 @@ class Trader(object):
             elif self.sell_signal(close):
                 order_nature = "sell_signal"
                 order = - close
-                self.position_contracts = self.total_capital // close
+                self.position_contracts = 3 * self.initial_capital // close
+                # if self.total_capital < self.initial_capital:
+                #     self.position_contracts = self.initial_capital // close
                 if (self.position_contracts) > (daily_volume * .01):
                     self.position_contracts = (daily_volume // 100)
                 if (self.position_contracts) < 5:
@@ -108,13 +116,14 @@ class Trader(object):
                 order_nature = "last_candle"
                 order = - close * math.copysign(1, self.position)
 
-
         if order: 
+            order = order + abs(order * 0.01/100)
             if not self.is_entry:
                 result = self.position + order
-                self.total_capital -= self.position_contracts * result
+                self.total_capital -= self.position_contracts * result 
+                self.total_capital -= 5
+
             self.position = order if self.is_entry else 0
             self.is_entry = not self.is_entry
-
 
         return order, order_nature
