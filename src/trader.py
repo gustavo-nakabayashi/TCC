@@ -18,6 +18,7 @@ class Trader(object):
         self.is_entry = True
         self.last_trade = 0
         self.can_trade_again = True
+        self.leverage = 3
 
     def stop_loss_hit(self, close: float) -> bool:
         if not self.max_ann: return False
@@ -89,24 +90,24 @@ class Trader(object):
             if self.buy_signal(close):
                 order_nature = "buy_signal"
                 order = close
-                self.position_contracts = 3 * self.initial_capital // close
+                self.position_contracts = self.leverage * self.initial_capital // close
                 # if self.total_capital < self.initial_capital:
                 #     self.position_contracts = self.initial_capital // close
                 if (self.position_contracts) > (daily_volume * .01):
                     self.position_contracts = (daily_volume // 100)
                 self.last_trade = 1
-                if (self.position_contracts) < 5:
-                    self.position_contracts = 5
+                if (self.position_contracts) < 2 * self.leverage:
+                    self.position_contracts = 2 * self.leverage
             elif self.sell_signal(close):
                 order_nature = "sell_signal"
                 order = - close
-                self.position_contracts = 3 * self.initial_capital // close
+                self.position_contracts = self.leverage * self.initial_capital // close
                 # if self.total_capital < self.initial_capital:
                 #     self.position_contracts = self.initial_capital // close
                 if (self.position_contracts) > (daily_volume * .01):
                     self.position_contracts = (daily_volume // 100)
-                if (self.position_contracts) < 5:
-                    self.position_contracts = 5
+                if (self.position_contracts) < 2 * self.leverage:
+                    self.position_contracts = 2 * self.leverage
                 self.last_trade = -1
 
         if is_last_candle_day:
