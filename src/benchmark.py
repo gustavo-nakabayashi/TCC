@@ -10,9 +10,9 @@ class Benchmark(object):
 
     def sma_5(self, rates_frame, window=5):
         sma_5_low = SMAIndicator(
-            close=rates_frame["low"], window=window).sma_indicator()
+            close=rates_frame["low"], window=window).sma_indicator().shift(periods=1)
         sma_5_high = SMAIndicator(
-            close=rates_frame["high"], window=window).sma_indicator()
+            close=rates_frame["high"], window=window).sma_indicator().shift(periods=1)
         result = pd.DataFrame([rates_frame["time"], sma_5_low, sma_5_high, rates_frame["low"],
                               rates_frame["high"], rates_frame["real_volume"]]).transpose().dropna().reset_index(drop=True)
         result.columns = ['time', 'min_ann',
@@ -21,9 +21,9 @@ class Benchmark(object):
 
     def sma_10(self, rates_frame, window=10):
         sma_5_low = SMAIndicator(
-            close=rates_frame["low"], window=window).sma_indicator()
+            close=rates_frame["low"], window=window).sma_indicator().shift(periods=1)
         sma_5_high = SMAIndicator(
-            close=rates_frame["high"], window=window).sma_indicator()
+            close=rates_frame["high"], window=window).sma_indicator().shift(periods=1)
         result = pd.DataFrame([rates_frame["time"], sma_5_low, sma_5_high, rates_frame["low"],
                               rates_frame["high"], rates_frame["real_volume"]]).transpose().dropna().reset_index(drop=True)
         result.columns = ['time', 'min_ann',
@@ -32,9 +32,9 @@ class Benchmark(object):
 
     def sma_20(self, rates_frame, window=20):
         sma_5_low = SMAIndicator(
-            close=rates_frame["low"], window=window).sma_indicator()
+            close=rates_frame["low"], window=window).sma_indicator().shift(periods=1)
         sma_5_high = SMAIndicator(
-            close=rates_frame["high"], window=window).sma_indicator()
+            close=rates_frame["high"], window=window).sma_indicator().shift(periods=1)
         result = pd.DataFrame([rates_frame["time"], sma_5_low, sma_5_high, rates_frame["low"],
                               rates_frame["high"], rates_frame["real_volume"]]).transpose().dropna().reset_index(drop=True)
         result.columns = ['time', 'min_ann',

@@ -1,7 +1,7 @@
 from datetime import datetime
 import pandas as pd
 import MetaTrader5 as mt5
-from ta.volatility import BollingerBands
+from ta.volatility import BollingerBands, SMAIndicator
 
 def collect_data():
     if not mt5.initialize():
@@ -67,6 +67,7 @@ def collect_data():
                 rates_frame['bb_bbh'] = indicator_bb.bollinger_hband()
                 rates_frame['bb_bbl'] = indicator_bb.bollinger_lband()
                 rates_frame = rates_frame.dropna()
+
 
 
                 if timeframe[1] == "D1":

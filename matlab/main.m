@@ -22,6 +22,7 @@ for k = 1 : length(theFiles)
         bbl_price_data  = file_csv(:,10:10);
         
         % Dados baixa
+
         [epm, acerto_percentual, ys] = previsor(low_price_data, high_price_data, open_price_data, bbh_price_data, bbl_price_data, "low");
         epm_row = [epm_row;epm];
         acerto_percentual_row = [acerto_percentual_row;acerto_percentual];
@@ -45,4 +46,6 @@ for k = 1 : length(theFiles)
     end
 end
 
-table(name_row,epm_row,acerto_percentual_row)
+tabela = table(name_row,epm_row,acerto_percentual_row)
+
+mean(tabela{:,'epm_row'})

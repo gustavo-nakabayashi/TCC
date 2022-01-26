@@ -72,8 +72,8 @@ class Trader(object):
         order_nature = ""
 
         alvo = 100 * (self.max_ann - self.min_ann) / self.max_ann
-        if alvo < 0.03:
-            return order, order_nature
+        # if alvo < 0.4:
+        #     return order, order_nature
 
         if self.take_profit_hit(close) and not self.is_entry:
             order = - close * math.copysign(1, self.position)

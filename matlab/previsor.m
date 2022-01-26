@@ -49,7 +49,7 @@ xv=x(npt+1:np,:);
 ydv=yd(npt+1:np);
 
 n=length(xv(1,:));
-m=5;
+m=5; %@TODO alterar esse valor
 alfa=0.1;
 nepocas=5;
 
@@ -101,7 +101,7 @@ for k=1:npv
     for i=1:n
         alfa=alfa+(mik1(i)^2 + mik2(i)^2);
     end
-    alfa=1/alfa;
+    alfa=1/alfa; % @TODO alterar
 
     if  mod(k,1) == 0
         for i=1:n
